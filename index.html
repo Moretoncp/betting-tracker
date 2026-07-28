@@ -284,23 +284,18 @@
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
   .table-scroll { overflow-x: auto; }
 
-  /* ---- Tips ---- */
-  .tips-grid {
-    display: grid; gap: 14px; margin-top: 24px;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  /* ---- VIP ---- */
+  .vip-card {
+    margin-top: 24px; border-radius: 16px;
+    background: linear-gradient(135deg, #1c2f4d, #0e1420);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #fff; padding: 34px clamp(20px, 4vw, 40px);
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
   }
-  .tip-card {
-    background: var(--surface-1); border: 1px solid var(--border);
-    border-radius: 14px; padding: 20px;
-    display: flex; flex-direction: column; gap: 10px;
-    text-decoration: none; color: var(--text-primary);
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
-  }
-  .tip-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
-  .tip-card .tp-name { font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 9px; }
-  .tip-card .tp-dot { width: 10px; height: 10px; border-radius: 50%; }
-  .tip-card .tp-handle { font-size: 13px; color: var(--text-secondary); word-break: break-all; }
-  .tip-card .tp-go { font-size: 13px; font-weight: 600; color: var(--accent-ink); margin-top: auto; }
+  .vip-card h3 { font-size: 21px; font-weight: 750; letter-spacing: -0.01em; }
+  .vip-card p { margin-top: 8px; font-size: 14.5px; color: #b9c3d4; line-height: 1.5; max-width: 520px; }
+  .btn-vip { background: #fab219; color: #241a00; font-weight: 700; }
+  .btn-vip:hover { filter: brightness(1.05); }
 
   /* ---- Discord ---- */
   .discord-card {
@@ -347,7 +342,7 @@
       <div class="nav-links">
         <a href="#record">Record</a>
         <a href="#log">Bet log</a>
-        <a href="#tips">Tips</a>
+        <a href="#vip">VIP</a>
         <a href="#discord" class="nav-cta" id="navDiscord">Join Discord</a>
       </div>
     </div>
@@ -413,13 +408,19 @@
       </div>
     </section>
 
-    <section class="block" id="tips">
+    <section class="block" id="vip">
       <div class="sec-head">
-        <span class="sec-kicker">Support</span>
-        <h2>Leave a tip</h2>
-        <div class="sec-sub">If the picks are hitting for you, tips keep the tracker running. Every payment goes through your own app — nothing is stored on this site.</div>
+        <span class="sec-kicker">Go premium</span>
+        <h2>VIP Membership</h2>
+        <div class="sec-sub">Every VIP pick with full reasoning, posted in the private VIP channel before game time.</div>
       </div>
-      <div class="tips-grid" id="tipsGrid"></div>
+      <div class="vip-card">
+        <div class="dc-text">
+          <h3>Chuck5674 VIP</h3>
+          <p>Premium picks, deeper analysis, and the VIP role in the Betting Lounge. Membership is handled securely through Whop. All sales are final.</p>
+        </div>
+        <a class="btn btn-vip" id="vipBtn" href="#" target="_blank" rel="noopener">Join VIP on Whop</a>
+      </div>
     </section>
 
     <section class="block" id="discord">
@@ -450,7 +451,7 @@
         <div class="foot-links">
           <a href="#record">Record</a>
           <a href="#log">Bet log</a>
-          <a href="#tips">Tips</a>
+          <a href="#vip">VIP</a>
           <a href="#discord">Discord</a>
         </div>
       </div>
@@ -531,24 +532,11 @@ function renderHero() {
 }
 
 /* ---------------- render: tips & discord ---------------- */
-function renderTips() {
-  const grid = document.getElementById("tipsGrid");
-  grid.textContent = "";
-  for (const t of CONFIG.tips) {
-    const a = document.createElement("a");
-    a.className = "tip-card";
-    a.target = "_blank"; a.rel = "noopener";
-    a.href = t.handle ? t.urlFor(t.handle) : "#tips";
-    const name = document.createElement("div"); name.className = "tp-name";
-    const dot = document.createElement("span"); dot.className = "tp-dot"; dot.style.background = t.color;
-    name.append(dot, document.createTextNode(t.name));
-    const handle = document.createElement("div"); handle.className = "tp-handle";
-    handle.textContent = t.handle ? t.handle : "Coming soon";
-    const go = document.createElement("div"); go.className = "tp-go";
-    go.textContent = t.handle ? "Send a tip →" : "Link on the way";
-    a.append(name, handle, go);
-    grid.append(a);
-  }
+function renderVIP() {
+  const btn = document.getElementById("vipBtn");
+  const link = (typeof CONFIG !== "undefined" && CONFIG.whopLink) || "";
+  if (link) { btn.href = link; }
+  else { btn.href = "#vip"; btn.textContent = "VIP link coming soon"; }
 }
 function renderDiscord() {
   const invite = CONFIG.discordInvite;
@@ -914,7 +902,7 @@ const sportSel = document.getElementById("sportSel");
 sportSel.addEventListener("change", () => { sport = sportSel.value; renderAll(); });
 window.addEventListener("resize", () => renderChart(filtered()));
 renderHero();
-renderTips();
+renderVIP();
 renderDiscord();
 renderAll();
 refreshLive();
