@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Charles's Betting Tracker</title>
+<title>Chuck5674's Betting Tracker</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -183,8 +183,8 @@
 <div class="viz-root">
 <div class="wrap">
   <header>
-    <h1>Charles's Betting Tracker</h1>
-    <div class="sub" id="subline">Tell Claude your picks and results — this page updates with every bet.</div>
+    <h1>Chuck5674's Betting Tracker</h1>
+    <div class="sub" id="subline">Updated after every bet settles.</div>
   </header>
 
   <div class="filters" role="group" aria-label="Filters">
@@ -221,13 +221,13 @@
     </div>
   </div>
 
-  <footer>American odds · pushes return the stake · updated by Claude as results come in</footer>
+  <footer>American odds · pushes return the stake</footer>
 </div>
 </div>
 
 <script>
 /* =======================================================================
-   BET DATA — Claude edits this array as Charles reports picks & results.
+   BET DATA
    result: "win" | "loss" | "push" | "pending"
    odds: American (e.g. -110, +150). stake in dollars.
    ======================================================================= */
@@ -323,7 +323,7 @@ function renderChart(rows) {
   if (settled.length < 1) {
     const d = document.createElement("div");
     d.className = "empty";
-    d.textContent = BETS.length ? "No settled bets in this view yet." : "No bets logged yet — give Claude your first picks to start the line.";
+    d.textContent = BETS.length ? "No settled bets in this view yet." : "No bets logged yet.";
     box.append(d);
     return;
   }
@@ -488,7 +488,7 @@ function renderTable(rows) {
     const td = document.createElement("td");
     td.colSpan = 8; td.className = "muted";
     td.style.textAlign = "center"; td.style.padding = "28px 10px";
-    td.textContent = "No bets yet. Tell Claude a pick — e.g. “$50 on Cubs ML at -120” — and it appears here.";
+    td.textContent = "No bets yet.";
     tr.append(td); tbody.append(tr);
     return;
   }
