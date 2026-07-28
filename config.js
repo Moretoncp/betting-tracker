@@ -3,12 +3,7 @@
    ======================================================================= */
 const CONFIG = {
   discordInvite: "https://discord.gg/yXqYFmD9Hj",
-  tips: [
-    { key: "venmo",   name: "Venmo",           color: "#008CFF", handle: "", urlFor: h => "https://venmo.com/u/" + h },
-    { key: "cashapp", name: "Cash App",        color: "#00D632", handle: "", urlFor: h => "https://cash.app/$" + h.replace(/^\$/, "") },
-    { key: "paypal",  name: "PayPal",          color: "#003087", handle: "", urlFor: h => "https://paypal.me/" + h },
-    { key: "coffee",  name: "Buy Me a Coffee", color: "#FFDD00", handle: "", urlFor: h => h.startsWith("http") ? h : "https://buymeacoffee.com/" + h },
-  ],
+ whopLink: "",  // Whop VIP checkout link
 };
 
 /* =======================================================================
