@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chuck5674's Betting Tracker</title>
+<title>Chuck5674 Picks — Transparent Betting Tracker</title>
+<meta name="description" content="Every pick, every result, tracked in public. Follow Chuck5674's sports betting record with full transparency.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
 
   .viz-root {
     color-scheme: light;
@@ -18,11 +21,17 @@
     --baseline:       #c3c2b7;
     --border:         rgba(11,11,11,0.10);
     --series-1:       #2a78d6;
+    --accent:         #2a78d6;
+    --accent-ink:     #1c5cab;
     --good:           #0ca30c;
     --good-text:      #006300;
     --critical:       #d03b3b;
     --warning:        #fab219;
     --ghost:          rgba(11,11,11,0.045);
+    --hero-bg:        #0e1420;
+    --hero-bg2:       #14243d;
+    --hero-ink:       #ffffff;
+    --hero-sub:       #b9c3d4;
   }
   @media (prefers-color-scheme: dark) {
     :root:where(:not([data-theme="light"])) .viz-root {
@@ -36,6 +45,8 @@
       --baseline:       #383835;
       --border:         rgba(255,255,255,0.10);
       --series-1:       #3987e5;
+      --accent:         #3987e5;
+      --accent-ink:     #6da7ec;
       --good:           #0ca30c;
       --good-text:      #0ca30c;
       --critical:       #d03b3b;
@@ -54,6 +65,8 @@
     --baseline:       #383835;
     --border:         rgba(255,255,255,0.10);
     --series-1:       #3987e5;
+    --accent:         #3987e5;
+    --accent-ink:     #6da7ec;
     --good:           #0ca30c;
     --good-text:      #0ca30c;
     --critical:       #d03b3b;
@@ -67,17 +80,108 @@
     background: var(--page);
     color: var(--text-primary);
     min-height: 100vh;
-    padding: 28px clamp(16px, 4vw, 48px) 64px;
   }
-  .wrap { max-width: 1080px; margin: 0 auto; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); }
 
-  header h1 { font-size: 20px; font-weight: 650; letter-spacing: -0.01em; }
-  header .sub { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+  /* ---- Nav ---- */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--hero-bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav-inner {
+    max-width: 1080px; margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 48px);
+    display: flex; align-items: center; gap: 26px; height: 58px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    color: #fff; text-decoration: none; font-weight: 700;
+    font-size: 15px; letter-spacing: 0.02em;
+  }
+  .brand .mark {
+    width: 26px; height: 26px; border-radius: 7px;
+    background: linear-gradient(135deg, #3987e5, #1c5cab);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 13px; font-weight: 800;
+  }
+  .nav-links { display: flex; gap: 4px; margin-left: auto; }
+  .nav-links a {
+    color: #b9c3d4; text-decoration: none; font-size: 13.5px;
+    padding: 7px 11px; border-radius: 7px;
+  }
+  .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.07); }
+  .nav-cta {
+    margin-left: 6px;
+    background: var(--accent); color: #fff !important;
+    font-weight: 600; padding: 8px 14px !important; border-radius: 8px;
+  }
+  .nav-cta:hover { filter: brightness(1.1); background: var(--accent) !important; }
+  @media (max-width: 640px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+  /* ---- Hero ---- */
+  .hero {
+    background:
+      radial-gradient(900px 420px at 85% -10%, rgba(57,135,229,0.28), transparent 60%),
+      radial-gradient(700px 380px at 0% 110%, rgba(28,92,171,0.22), transparent 60%),
+      linear-gradient(160deg, var(--hero-bg), var(--hero-bg2));
+    color: var(--hero-ink);
+    padding: 74px 0 66px;
+  }
+  .hero .kicker {
+    display: inline-block; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: #8fb8ec; margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-size: clamp(30px, 5vw, 46px); font-weight: 750;
+    letter-spacing: -0.02em; line-height: 1.08; max-width: 640px;
+  }
+  .hero p.lede {
+    margin-top: 14px; font-size: 16.5px; line-height: 1.55;
+    color: var(--hero-sub); max-width: 560px;
+  }
+  .hero-ctas { display: flex; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font: inherit; font-size: 14.5px; font-weight: 600;
+    padding: 11px 20px; border-radius: 9px; border: none;
+    cursor: pointer; text-decoration: none;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.1); }
+  .btn-ghost {
+    background: rgba(255,255,255,0.09); color: #fff;
+    border: 1px solid rgba(255,255,255,0.18);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.15); }
+  .hero-stats {
+    display: flex; gap: 0; margin-top: 40px; flex-wrap: wrap; row-gap: 18px;
+  }
+  .hstat { padding: 0 28px; border-left: 1px solid rgba(255,255,255,0.14); }
+  .hstat:first-child { border-left: none; padding-left: 0; }
+  .hstat .hs-label { font-size: 12px; color: #8b96a8; }
+  .hstat .hs-value { font-size: 26px; font-weight: 700; margin-top: 4px; letter-spacing: -0.01em; }
+  .hstat .hs-value.pos { color: #4fd06a; }
+  .hstat .hs-value.neg { color: #ff7b74; }
+
+  /* ---- Sections ---- */
+  section.block { padding: 52px 0 8px; }
+  .sec-head { margin-bottom: 6px; }
+  .sec-head .sec-kicker {
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--accent-ink);
+  }
+  .sec-head h2 {
+    font-size: 22px; font-weight: 700; letter-spacing: -0.01em; margin-top: 6px;
+  }
+  .sec-head .sec-sub { font-size: 14px; color: var(--text-muted); margin-top: 5px; }
 
   /* ---- Filter row ---- */
   .filters {
     display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-    margin: 26px 0 6px; padding-bottom: 14px;
+    margin: 22px 0 6px; padding-bottom: 14px;
     border-bottom: 1px solid var(--gridline);
   }
   .seg { display: inline-flex; gap: 2px; }
@@ -108,15 +212,15 @@
   .tile .value {
     font-size: 21px; font-weight: 600; margin-top: 5px; letter-spacing: -0.01em;
   }
-  .tile.hero { padding-right: 34px; }
-  .tile.hero .value { font-size: 40px; letter-spacing: -0.02em; line-height: 1.05; }
+  .tile.hero-tile { padding-right: 34px; }
+  .tile.hero-tile .value { font-size: 40px; letter-spacing: -0.02em; line-height: 1.05; }
   .tile .note { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
   .value.pos { color: var(--good-text); }
   .value.neg { color: var(--critical); }
 
-  /* ---- Sections ---- */
-  .card { margin-top: 40px; }
-  .card h2 {
+  /* ---- Cards ---- */
+  .card { margin-top: 34px; }
+  .card h3 {
     font-size: 12px; font-weight: 600; color: var(--text-secondary);
     text-transform: uppercase; letter-spacing: 0.07em;
   }
@@ -174,70 +278,191 @@
   .chip.pending { color: var(--text-muted); font-weight: 500; }
   .pl-pos { color: var(--good-text); font-weight: 600; }
   .pl-neg { color: var(--critical); font-weight: 600; }
-
+  .live-line { font-size: 11.5px; margin-top: 3px; font-weight: 500; color: var(--text-muted); }
+  .live-line.on { color: var(--accent-ink); }
+  .live-line.on::before { content: "●"; margin-right: 5px; font-size: 8px; vertical-align: 1px; animation: pulse 1.6s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
   .table-scroll { overflow-x: auto; }
-  footer { margin-top: 14px; color: var(--text-muted); font-size: 12px; }
+
+  /* ---- Tips ---- */
+  .tips-grid {
+    display: grid; gap: 14px; margin-top: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  .tip-card {
+    background: var(--surface-1); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px;
+    display: flex; flex-direction: column; gap: 10px;
+    text-decoration: none; color: var(--text-primary);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .tip-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+  .tip-card .tp-name { font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 9px; }
+  .tip-card .tp-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .tip-card .tp-handle { font-size: 13px; color: var(--text-secondary); word-break: break-all; }
+  .tip-card .tp-go { font-size: 13px; font-weight: 600; color: var(--accent-ink); margin-top: auto; }
+
+  /* ---- Discord ---- */
+  .discord-card {
+    margin-top: 24px; border-radius: 16px; overflow: hidden;
+    background: linear-gradient(135deg, #4c57c7, #3b479e);
+    color: #fff; padding: 34px clamp(20px, 4vw, 40px);
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+  .discord-card .dc-text { flex: 1 1 320px; }
+  .discord-card h3 { font-size: 21px; font-weight: 750; letter-spacing: -0.01em; }
+  .discord-card p { margin-top: 8px; font-size: 14.5px; color: #d6d9f5; line-height: 1.5; max-width: 480px; }
+  .discord-card .dc-roles { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .role-pill {
+    font-size: 12px; font-weight: 600; padding: 4px 11px; border-radius: 99px;
+    background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.22);
+  }
+  .btn-discord { background: #fff; color: #3b479e; font-weight: 700; }
+  .btn-discord:hover { filter: brightness(0.95); }
+
+  /* ---- Footer ---- */
+  .site-footer {
+    margin-top: 64px; background: var(--hero-bg); color: #8b96a8;
+    padding: 34px 0 40px; font-size: 13px;
+  }
+  .site-footer .foot-inner {
+    max-width: 1080px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px);
+  }
+  .site-footer .foot-top {
+    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .site-footer .foot-links { margin-left: auto; display: flex; gap: 16px; }
+  .site-footer a { color: #b9c3d4; text-decoration: none; }
+  .site-footer a:hover { color: #fff; }
+  .site-footer .disclaimer { margin-top: 16px; line-height: 1.6; max-width: 760px; }
 </style>
 </head>
 <body>
 <div class="viz-root">
-<div class="wrap">
-  <header>
-    <h1>Chuck5674's Betting Tracker</h1>
-    <div class="sub" id="subline">Updated after every bet settles.</div>
+
+  <nav class="nav" aria-label="Main">
+    <div class="nav-inner">
+      <a class="brand" href="#top"><span class="mark">C</span>CHUCK5674 PICKS</a>
+      <div class="nav-links">
+        <a href="#record">Record</a>
+        <a href="#log">Bet log</a>
+        <a href="#tips">Tips</a>
+        <a href="#discord" class="nav-cta" id="navDiscord">Join Discord</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="wrap">
+      <span class="kicker">Transparent sports betting</span>
+      <h1>Every pick. Every result.<br>Tracked in public.</h1>
+      <p class="lede">No deleted losses, no cherry-picked screenshots. The full record — stakes, odds, and running profit — updated after every bet settles.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#discord">Join the Discord</a>
+        <a class="btn btn-ghost" href="#record">See the record</a>
+      </div>
+      <div class="hero-stats" id="heroStats"></div>
+    </div>
   </header>
 
-  <div class="filters" role="group" aria-label="Filters">
-    <div class="seg" id="rangeSeg">
-      <button data-range="all" aria-pressed="true">All time</button>
-      <button data-range="7" aria-pressed="false">Last 7 days</button>
-      <button data-range="30" aria-pressed="false">Last 30 days</button>
+  <main class="wrap">
+
+    <section class="block" id="record">
+      <div class="sec-head">
+        <span class="sec-kicker">The record</span>
+        <h2>Performance</h2>
+        <div class="sec-sub">Live numbers straight from the bet log below.</div>
+      </div>
+
+      <div class="filters" role="group" aria-label="Filters">
+        <div class="seg" id="rangeSeg">
+          <button data-range="all" aria-pressed="true">All time</button>
+          <button data-range="7" aria-pressed="false">Last 7 days</button>
+          <button data-range="30" aria-pressed="false">Last 30 days</button>
+        </div>
+        <select id="sportSel" aria-label="Sport filter"><option value="all">All sports</option></select>
+      </div>
+
+      <div class="tiles" id="tiles"></div>
+
+      <div class="card">
+        <h3>Cumulative profit</h3>
+        <div class="card-sub">Settled bets only, in bet order</div>
+        <div class="chart-box" id="chartBox"></div>
+      </div>
+    </section>
+
+    <section class="block" id="log">
+      <div class="sec-head">
+        <span class="sec-kicker">Full transparency</span>
+        <h2>Bet log</h2>
+        <div class="sec-sub" id="logCount"></div>
+      </div>
+      <div class="table-scroll" style="margin-top:14px;">
+        <table id="logTable" aria-label="Bet log">
+          <thead>
+            <tr>
+              <th>Date</th><th>Sport</th><th>Pick</th>
+              <th class="num">Odds</th><th class="num">Stake</th>
+              <th>Result</th><th class="num">P/L</th><th class="num">Running</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="block" id="tips">
+      <div class="sec-head">
+        <span class="sec-kicker">Support</span>
+        <h2>Leave a tip</h2>
+        <div class="sec-sub">If the picks are hitting for you, tips keep the tracker running. Every payment goes through your own app — nothing is stored on this site.</div>
+      </div>
+      <div class="tips-grid" id="tipsGrid"></div>
+    </section>
+
+    <section class="block" id="discord">
+      <div class="sec-head">
+        <span class="sec-kicker">Community</span>
+        <h2>The Betting Lounge</h2>
+      </div>
+      <div class="discord-card">
+        <div class="dc-text">
+          <h3>Chuck5674 Betting Lounge</h3>
+          <p>Picks drop in Discord first. Talk lines, sweat the games live, and see results the moment they settle.</p>
+          <div class="dc-roles">
+            <span class="role-pill">Admin</span>
+            <span class="role-pill">VIP</span>
+            <span class="role-pill">Member</span>
+          </div>
+        </div>
+        <a class="btn btn-discord" id="discordBtn" href="#" target="_blank" rel="noopener">Join the server</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="foot-inner">
+      <div class="foot-top">
+        <a class="brand" href="#top" style="font-size:14px;"><span class="mark">C</span>CHUCK5674 PICKS</a>
+        <div class="foot-links">
+          <a href="#record">Record</a>
+          <a href="#log">Bet log</a>
+          <a href="#tips">Tips</a>
+          <a href="#discord">Discord</a>
+        </div>
+      </div>
+      <p class="disclaimer">Tracking is for entertainment and informational purposes only and is not financial or betting advice. Past results do not guarantee future performance. Must be 21+ to wager where legal. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</p>
+      <p class="disclaimer" style="margin-top:8px;">American odds · pushes return the stake · © 2026 Chuck5674 Picks</p>
     </div>
-    <select id="sportSel" aria-label="Sport filter"><option value="all">All sports</option></select>
-  </div>
+  </footer>
 
-  <div class="tiles" id="tiles"></div>
-
-  <div class="card">
-    <h2>Cumulative profit</h2>
-    <div class="card-sub">Settled bets only, in bet order</div>
-    <div class="chart-box" id="chartBox"></div>
-  </div>
-
-  <div class="card">
-    <h2>Bet log</h2>
-    <div class="card-sub" id="logCount"></div>
-    <div class="table-scroll" style="margin-top:10px;">
-      <table id="logTable" aria-label="Bet log">
-        <thead>
-          <tr>
-            <th>Date</th><th>Sport</th><th>Pick</th>
-            <th class="num">Odds</th><th class="num">Stake</th>
-            <th>Result</th><th class="num">P/L</th><th class="num">Running</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
-
-  <footer>American odds · pushes return the stake</footer>
-</div>
 </div>
 
+<script src="config.js"></script>
 <script>
-/* =======================================================================
-   BET DATA
-   result: "win" | "loss" | "push" | "pending"
-   odds: American (e.g. -110, +150). stake in dollars.
-   ======================================================================= */
-const BETS = [
-  { date: "2026-07-28", sport: "MLB", pick: "Detroit Tigers ML", type: "Moneyline", odds: -149, stake: 500, result: "pending", book: "" },
-  { date: "2026-07-28", sport: "MLB", pick: "Phillies/Marlins o7.5", type: "Total", odds: -134, stake: 500, result: "pending", book: "" },
-  { date: "2026-07-28", sport: "MLB", pick: "Padres ML vs Rockies", type: "Moneyline", odds: -223, stake: 500, result: "pending", book: "" },
-  { date: "2026-07-28", sport: "MLB", pick: "Padres/Rockies o7.5", type: "Total", odds: -143, stake: 500, result: "pending", book: "" },
-];
-
 /* ---------------- calculations ---------------- */
 function profitIfWin(odds, stake) {
   return odds > 0 ? stake * (odds / 100) : stake * (100 / Math.abs(odds));
@@ -279,6 +504,60 @@ function filtered() {
   return rows;
 }
 
+/* ---------------- render: hero stats ---------------- */
+function renderHero() {
+  const settled = BETS.filter(b => b.result !== "pending");
+  const wins = settled.filter(b => b.result === "win").length;
+  const losses = settled.filter(b => b.result === "loss").length;
+  const pushes = settled.filter(b => b.result === "push").length;
+  const net = settled.reduce((s, b) => s + betPL(b), 0);
+  const staked = settled.reduce((s, b) => s + b.stake, 0);
+  const roi = staked ? (net / staked * 100) : null;
+
+  const el = document.getElementById("heroStats");
+  el.textContent = "";
+  const stats = [
+    { label: "Record", value: wins + "–" + losses + (pushes ? "–" + pushes : "") },
+    { label: "Net profit", value: fmtMoney(net, true), cls: net > 0 ? "pos" : net < 0 ? "neg" : "" },
+    { label: "ROI", value: roi === null ? "—" : (roi > 0 ? "+" : "") + roi.toFixed(1) + "%", cls: roi > 0 ? "pos" : roi < 0 ? "neg" : "" },
+    { label: "Bets tracked", value: String(BETS.length) },
+  ];
+  for (const s of stats) {
+    const d = document.createElement("div"); d.className = "hstat";
+    const l = document.createElement("div"); l.className = "hs-label"; l.textContent = s.label;
+    const v = document.createElement("div"); v.className = "hs-value" + (s.cls ? " " + s.cls : ""); v.textContent = s.value;
+    d.append(l, v); el.append(d);
+  }
+}
+
+/* ---------------- render: tips & discord ---------------- */
+function renderTips() {
+  const grid = document.getElementById("tipsGrid");
+  grid.textContent = "";
+  for (const t of CONFIG.tips) {
+    const a = document.createElement("a");
+    a.className = "tip-card";
+    a.target = "_blank"; a.rel = "noopener";
+    a.href = t.handle ? t.urlFor(t.handle) : "#tips";
+    const name = document.createElement("div"); name.className = "tp-name";
+    const dot = document.createElement("span"); dot.className = "tp-dot"; dot.style.background = t.color;
+    name.append(dot, document.createTextNode(t.name));
+    const handle = document.createElement("div"); handle.className = "tp-handle";
+    handle.textContent = t.handle ? t.handle : "Coming soon";
+    const go = document.createElement("div"); go.className = "tp-go";
+    go.textContent = t.handle ? "Send a tip →" : "Link on the way";
+    a.append(name, handle, go);
+    grid.append(a);
+  }
+}
+function renderDiscord() {
+  const invite = CONFIG.discordInvite;
+  const btn = document.getElementById("discordBtn");
+  const nav = document.getElementById("navDiscord");
+  if (invite) { btn.href = invite; nav.href = invite; nav.target = "_blank"; nav.rel = "noopener"; }
+  else { btn.href = "#discord"; btn.textContent = "Invite coming soon"; }
+}
+
 /* ---------------- render: tiles ---------------- */
 function renderTiles(rows) {
   const settled = rows.filter(b => b.result !== "pending");
@@ -306,7 +585,7 @@ function renderTiles(rows) {
   ];
   for (const t of tiles) {
     const d = document.createElement("div");
-    d.className = "tile" + (t.hero ? " hero" : "");
+    d.className = "tile" + (t.hero ? " hero-tile" : "");
     const l = document.createElement("div"); l.className = "label"; l.textContent = t.label;
     const v = document.createElement("div"); v.className = "value" + (t.cls ? " " + t.cls : ""); v.textContent = t.value;
     d.append(l, v);
@@ -478,6 +757,7 @@ const RESULT_CHIP = {
   pending: { icon: "◷", text: "Pending", cls: "pending" },
 };
 function renderTable(rows) {
+  LIVE_SLOTS = [];
   const tbody = document.querySelector("#logTable tbody");
   tbody.textContent = "";
   const count = document.getElementById("logCount");
@@ -519,7 +799,13 @@ function renderTable(rows) {
     const chip = document.createElement("span"); chip.className = "chip " + c.cls;
     const ic = document.createElement("span"); ic.setAttribute("aria-hidden", "true"); ic.textContent = c.icon;
     chip.append(ic, document.createTextNode(c.text));
-    tdRes.append(chip); cells.push(tdRes);
+    tdRes.append(chip);
+    if (b.result === "pending") {
+      const lv = document.createElement("div"); lv.className = "live-line";
+      tdRes.append(lv);
+      LIVE_SLOTS.push({ el: lv, bet: b });
+    }
+    cells.push(tdRes);
 
     const tdPL = document.createElement("td"); tdPL.className = "num";
     if (pl === null) { tdPL.textContent = "—"; tdPL.classList.add("muted"); }
@@ -536,12 +822,80 @@ function renderTable(rows) {
   }
 }
 
+/* ---------------- live scores (ESPN public scoreboard) ---------------- */
+const LIVE_ENDPOINTS = {
+  MLB: "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard",
+  NBA: "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard",
+  NFL: "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard",
+  NHL: "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard",
+  NCAAF: "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+  NCAAB: "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard",
+};
+let LIVE_SLOTS = [];
+const liveCache = {};
+
+function matchEvent(pick, events) {
+  const p = pick.toLowerCase();
+  let best = null, bestScore = 0;
+  for (const ev of events) {
+    const comp = ev.competitions && ev.competitions[0];
+    if (!comp) continue;
+    let score = 0;
+    for (const c of comp.competitors || []) {
+      const t = c.team || {};
+      const names = [t.shortDisplayName, t.name, t.displayName, t.abbreviation].filter(Boolean);
+      if (names.some(n => p.includes(String(n).toLowerCase()))) score++;
+    }
+    if (score > bestScore) { bestScore = score; best = ev; }
+  }
+  return bestScore ? best : null;
+}
+
+function annotateLive() {
+  for (const slot of LIVE_SLOTS) {
+    const evs = liveCache[slot.bet.sport];
+    if (!evs) continue;
+    const ev = matchEvent(slot.bet.pick, evs);
+    if (!ev) { slot.el.textContent = ""; slot.el.classList.remove("on"); continue; }
+    const comp = ev.competitions[0];
+    const cs = comp.competitors || [];
+    const away = cs.find(c => c.homeAway === "away"), home = cs.find(c => c.homeAway === "home");
+    const st = (ev.status && ev.status.type) || {};
+    const detail = st.shortDetail || st.detail || "";
+    let text;
+    if (st.state === "pre") {
+      text = detail;
+    } else {
+      const ab = t => (t && t.team && t.team.abbreviation) || "";
+      text = ab(away) + " " + (away ? away.score : "") + " \u2013 " + ab(home) + " " + (home ? home.score : "") + " \u00b7 " + detail;
+    }
+    slot.el.textContent = text;
+    slot.el.classList.toggle("on", st.state === "in");
+  }
+}
+
+async function refreshLive() {
+  if (!LIVE_SLOTS.length) return;
+  const sports = [...new Set(LIVE_SLOTS.map(s => s.bet.sport))];
+  await Promise.all(sports.map(async sp => {
+    const url = LIVE_ENDPOINTS[sp];
+    if (!url) return;
+    try {
+      const r = await fetch(url);
+      const j = await r.json();
+      liveCache[sp] = j.events || [];
+    } catch (e) { /* offline or blocked - leave cache */ }
+  }));
+  annotateLive();
+}
+
 /* ---------------- wiring ---------------- */
 function renderAll() {
   const rows = filtered();
   renderTiles(rows);
   renderChart(rows);
   renderTable(rows);
+  annotateLive();
 }
 document.getElementById("rangeSeg").addEventListener("click", e => {
   const btn = e.target.closest("button"); if (!btn) return;
@@ -559,7 +913,12 @@ const sportSel = document.getElementById("sportSel");
 })();
 sportSel.addEventListener("change", () => { sport = sportSel.value; renderAll(); });
 window.addEventListener("resize", () => renderChart(filtered()));
+renderHero();
+renderTips();
+renderDiscord();
 renderAll();
+refreshLive();
+setInterval(refreshLive, 60000);
 </script>
 </body>
 </html>
