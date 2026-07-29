@@ -3,7 +3,7 @@
    ======================================================================= */
 const CONFIG = {
   discordInvite: "https://discord.gg/yXqYFmD9Hj",
-  whopLink: "",  // Whop VIP checkout link
+  vipLink: "https://www.launchpass.com/chuck5674-betting-lounge/vip",  // LaunchPass VIP checkout link
 };
 
 /* =======================================================================
