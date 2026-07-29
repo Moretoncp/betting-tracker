@@ -820,6 +820,9 @@ const LIVE_ENDPOINTS = {
 };
 let LIVE_SLOTS = [];
 const liveCache = {};
+/* cache per sport+date: ESPN's default scoreboard can lag a day, which would
+   match a pending bet against the previous day's already-final game. */
+const liveKey = b => b.sport + "|" + b.date;
 
 function matchEvent(pick, events) {
   const p = pick.toLowerCase();
@@ -840,7 +843,7 @@ function matchEvent(pick, events) {
 
 function annotateLive() {
   for (const slot of LIVE_SLOTS) {
-    const evs = liveCache[slot.bet.sport];
+    const evs = liveCache[liveKey(slot.bet)];
     if (!evs) continue;
     const ev = matchEvent(slot.bet.pick, evs);
     if (!ev) { slot.el.textContent = ""; slot.el.classList.remove("on"); continue; }
@@ -854,7 +857,7 @@ function annotateLive() {
       text = detail;
     } else {
       const ab = t => (t && t.team && t.team.abbreviation) || "";
-      text = ab(away) + " " + (away ? away.score : "") + " – " + ab(home) + " " + (home ? home.score : "") + " · " + detail;
+      text = ab(away) + " " + (away ? away.score : "") + " \u2013 " + ab(home) + " " + (home ? home.score : "") + " \u00b7 " + detail;
     }
     slot.el.textContent = text;
     slot.el.classList.toggle("on", st.state === "in");
@@ -863,14 +866,14 @@ function annotateLive() {
 
 async function refreshLive() {
   if (!LIVE_SLOTS.length) return;
-  const sports = [...new Set(LIVE_SLOTS.map(s => s.bet.sport))];
-  await Promise.all(sports.map(async sp => {
-    const url = LIVE_ENDPOINTS[sp];
-    if (!url) return;
+  const jobs = [...new Map(LIVE_SLOTS.map(s => [liveKey(s.bet), s.bet])).values()];
+  await Promise.all(jobs.map(async b => {
+    const base = LIVE_ENDPOINTS[b.sport];
+    if (!base) return;
     try {
-      const r = await fetch(url);
+      const r = await fetch(base + "?dates=" + b.date.replace(/-/g, ""));
       const j = await r.json();
-      liveCache[sp] = j.events || [];
+      liveCache[liveKey(b)] = j.events || [];
     } catch (e) { /* offline or blocked - leave cache */ }
   }));
   annotateLive();
