@@ -17,4 +17,10 @@ const BETS = [
   { date: "2026-07-28", sport: "MLB", pick: "Padres ML vs Rockies", type: "Moneyline", odds: -223, stake: 500, result: "win", book: "" },
   { date: "2026-07-28", sport: "MLB", pick: "Padres/Rockies o7.5", type: "Total", odds: -143, stake: 500, result: "win", book: "" },
   { date: "2026-07-29", sport: "MLB", pick: "Blue Jays vs Nationals YRFI", type: "Prop", odds: -126, stake: 250, result: "pending", book: "" },
+  { date: "2026-07-29", sport: "MLB", pick: "Chase DeLauter o1.5 Total Bases", type: "Prop", odds: 108, stake: 100, result: "pending", book: "" },
+  { date: "2026-07-29", sport: "MLB", pick: "Kyle Manzardo o1.5 Total Bases", type: "Prop", odds: 144, stake: 100, result: "pending", book: "" },
+  { date: "2026-07-29", sport: "MLB", pick: "Pete Crow-Armstrong o1.5 Total Bases", type: "Prop", odds: 115, stake: 250, result: "pending", book: "" },
+  { date: "2026-07-29", sport: "MLB", pick: "Yordan Alvarez o1.5 Total Bases", type: "Prop", odds: -136, stake: 250, result: "pending", book: "" },
+  { date: "2026-07-29", sport: "MLB", pick: "Wilson Contreras o1.5 Total Bases", type: "Prop", odds: 186, stake: 100, result: "pending", book: "" },
+  { date: "2026-07-29", sport: "MLB", pick: "Jordan Walker o1.5 Total Bases", type: "Prop", odds: 113, stake: 100, result: "pending", book: "" },
 ];
