@@ -352,7 +352,6 @@
     <div class="wrap">
       <span class="kicker">Transparent sports betting</span>
       <h1>Every pick. Every result.<br>Tracked in public.</h1>
-      <p class="lede">No deleted losses, no cherry-picked screenshots. The full record — stakes, odds, and running profit — updated after every bet settles.</p>
       <div class="hero-ctas">
         <a class="btn btn-primary" href="#discord">Join the Discord</a>
         <a class="btn btn-ghost" href="#record">See the record</a>
@@ -855,7 +854,7 @@ function annotateLive() {
       text = detail;
     } else {
       const ab = t => (t && t.team && t.team.abbreviation) || "";
-      text = ab(away) + " " + (away ? away.score : "") + " \u2013 " + ab(home) + " " + (home ? home.score : "") + " \u00b7 " + detail;
+      text = ab(away) + " " + (away ? away.score : "") + " – " + ab(home) + " " + (home ? home.score : "") + " · " + detail;
     }
     slot.el.textContent = text;
     slot.el.classList.toggle("on", st.state === "in");
