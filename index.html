@@ -417,9 +417,9 @@
       <div class="vip-card">
         <div class="dc-text">
           <h3>Chuck5674 VIP</h3>
-          <p>Premium picks, deeper analysis, and the VIP role in the Betting Lounge. Membership is handled securely through Whop. All sales are final.</p>
+          <p>Premium picks, deeper analysis, and the VIP role in the Betting Lounge. Membership is handled securely through LaunchPass. All sales are final.</p>
         </div>
-        <a class="btn btn-vip" id="vipBtn" href="#" target="_blank" rel="noopener">Join VIP on Whop</a>
+        <a class="btn btn-vip" id="vipBtn" href="#" target="_blank" rel="noopener">Join VIP</a>
       </div>
     </section>
 
@@ -534,7 +534,7 @@ function renderHero() {
 /* ---------------- render: tips & discord ---------------- */
 function renderVIP() {
   const btn = document.getElementById("vipBtn");
-  const link = (typeof CONFIG !== "undefined" && CONFIG.whopLink) || "";
+  const link = (typeof CONFIG !== "undefined" && CONFIG.vipLink) || "";
   if (link) { btn.href = link; }
   else { btn.href = "#vip"; btn.textContent = "VIP link coming soon"; }
 }
