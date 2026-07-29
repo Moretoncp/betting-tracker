@@ -461,7 +461,11 @@
 
 </div>
 
-<script src="config.js"></script>
+<!-- Cache-bust config.js. GitHub Pages serves it with max-age=600, so without
+     this a normal refresh can show stale picks for up to 10 minutes after an
+     update. document.write keeps the load synchronous, so CONFIG/BETS are
+     defined before the app script below runs. -->
+<script>document.write('<script src="config.js?t=' + Date.now() + '"><\/script>');</script>
 <script>
 /* ---------------- calculations ---------------- */
 function profitIfWin(odds, stake) {
