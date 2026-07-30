@@ -25,4 +25,5 @@ const BETS = [
   { date: "2026-07-29", sport: "MLB", pick: "Jordan Walker o1.5 Total Bases", type: "Prop", odds: 113, stake: 100, result: "loss", book: "" },
   { date: "2026-07-30", sport: "MLB", pick: "Rays ML vs Rangers", type: "Moneyline", odds: -155, stake: 500, result: "win", book: "" },
   { date: "2026-07-30", sport: "MLB", pick: "Red Sox ML", type: "Moneyline", odds: -191, stake: 500, result: "pending", book: "" },
+  { date: "2026-07-30", sport: "MLB", pick: "Marlins ML", type: "Moneyline", odds: 105, stake: 250, result: "pending", book: "" },
 ];
