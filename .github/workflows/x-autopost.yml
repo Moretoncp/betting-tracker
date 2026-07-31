@@ -1,0 +1,75 @@
+# =====================================================================
+# Auto-post the daily card and the settled recap to X.
+#
+# BEFORE THIS DOES ANYTHING you must add four repository secrets:
+#   Settings > Secrets and variables > Actions > New repository secret
+#     X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET
+# Until then every run fails loudly and posts nothing. That is intended.
+#
+# Times are UTC. The offsets below assume US Eastern Daylight Time
+# (UTC-4); in winter they land an hour earlier in local terms. Adjust the
+# cron lines in November if that bothers you.
+# =====================================================================
+name: Post to X
+
+on:
+  schedule:
+    - cron: "0 15 * * *"   # 15:00 UTC = 11:00 ET — today's card, pre-game
+    - cron: "0 6 * * *"    # 06:00 UTC = 02:00 ET — last night's recap
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "card or recap"
+        required: true
+        default: recap
+        type: choice
+        options: [card, recap]
+      date:
+        description: "YYYY-MM-DD (blank = today, US Eastern)"
+        required: false
+        type: string
+      dry:
+        description: "Dry run — compose and log, send nothing"
+        required: false
+        default: false
+        type: boolean
+
+# Never let two runs post at the same moment.
+concurrency:
+  group: post-to-x
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Compose and post
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: |
+          set -euo pipefail
+
+          # Pick the mode: manual input wins, otherwise infer from which cron fired.
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            MODE="${{ inputs.mode }}"
+            DATE_ARG=""
+            [ -n "${{ inputs.date }}" ] && DATE_ARG="--date=${{ inputs.date }}"
+            DRY_ARG=""
+            [ "${{ inputs.dry }}" = "true" ] && DRY_ARG="--dry"
+          elif [ "${{ github.event.schedule }}" = "0 15 * * *" ]; then
+            MODE="card"; DATE_ARG=""; DRY_ARG=""
+          else
+            MODE="recap"; DATE_ARG=""; DRY_ARG=""
+          fi
+
+          echo "mode=$MODE $DATE_ARG $DRY_ARG"
+          node .github/scripts/post.js "$MODE" $DATE_ARG $DRY_ARG
