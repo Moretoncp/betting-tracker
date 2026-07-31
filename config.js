@@ -28,4 +28,5 @@ const BETS = [
   { date: "2026-07-30", sport: "MLB", pick: "Marlins ML", type: "Moneyline", odds: 105, stake: 250, result: "loss", book: "" },
   { date: "2026-07-30", sport: "MLB", pick: "Pirates/Reds u9.5", type: "Total", odds: -168, stake: 250, result: "win", book: "" },
   { date: "2026-07-30", sport: "MLB", pick: "Nationals/Braves u10.5", type: "Total", odds: -191, stake: 250, result: "win", book: "" },
+  { date: "2026-07-31", sport: "MLB", pick: "Corbin Carroll o1.5 Total Bases", type: "Prop", odds: 105, stake: 250, result: "pending", book: "" },
 ];
