@@ -28,5 +28,11 @@ const BETS = [
   { date: "2026-07-30", sport: "MLB", pick: "Marlins ML", type: "Moneyline", odds: 105, stake: 250, result: "loss", book: "" },
   { date: "2026-07-30", sport: "MLB", pick: "Pirates/Reds u9.5", type: "Total", odds: -168, stake: 250, result: "win", book: "" },
   { date: "2026-07-30", sport: "MLB", pick: "Nationals/Braves u10.5", type: "Total", odds: -191, stake: 250, result: "win", book: "" },
-  { date: "2026-07-31", sport: "MLB", pick: "Corbin Carroll o1.5 Total Bases", type: "Prop", odds: 105, stake: 250, result: "pending", book: "" },
+  { date: "2026-07-31", sport: "MLB", pick: "Corbin Carroll o1.5 Total Bases", type: "Prop", odds: 105, stake: 250, result: "loss", book: "" },
+  { date: "2026-08-01", sport: "MLB", pick: "Dodgers ML", type: "Moneyline", odds: -168, stake: 250, result: "pending", book: "" },
+  { date: "2026-08-01", sport: "MLB", pick: "Guardians ML", type: "Moneyline", odds: -176, stake: 250, result: "pending", book: "" },
+  { date: "2026-08-01", sport: "MLB", pick: "Yankees ML", type: "Moneyline", odds: -104, stake: 250, result: "pending", book: "" },
+  { date: "2026-08-01", sport: "MLB", pick: "Phillies ML", type: "Moneyline", odds: -149, stake: 250, result: "pending", book: "" },
+  { date: "2026-08-01", sport: "MLB", pick: "Matt Olson o1.5 Total Bases", type: "Prop", odds: 101, stake: 250, result: "pending", book: "" },
+  { date: "2026-08-01", sport: "MLB", pick: "Tyler Phillips 2+ Strikeouts", type: "Prop", odds: -576, stake: 500, result: "pending", book: "" },
 ];
