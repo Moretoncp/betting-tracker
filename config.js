@@ -35,4 +35,6 @@ const BETS = [
   { date: "2026-08-01", sport: "MLB", pick: "Phillies ML", type: "Moneyline", odds: -149, stake: 250, result: "win", book: "" },
   { date: "2026-08-01", sport: "MLB", pick: "Matt Olson o1.5 Total Bases", type: "Prop", odds: 101, stake: 250, result: "win", book: "" },
   { date: "2026-08-01", sport: "MLB", pick: "Tyler Phillips 2+ Strikeouts", type: "Prop", odds: -576, stake: 500, result: "win", book: "" },
+  { date: "2026-08-03", sport: "MLB", pick: "Nationals vs Phillies YRFI", type: "Prop", odds: -137, stake: 250, result: "pending", book: "" },
+  { date: "2026-08-03", sport: "MLB", pick: "Bryce Harper 1+ Hits", type: "Prop", odds: -229, stake: 250, result: "pending", book: "" },
 ];
